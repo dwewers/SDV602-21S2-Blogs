@@ -95,7 +95,7 @@ plt.show()                   # Display the plot
 
 This gives us the following results:
 
-![image-20210723182835881](C:\Users\OEM\AppData\Roaming\Typora\typora-user-images\image-20210723182835881.png)
+![image-20210723182835881](SDV602-21S2-Blogs\Assets\image-20210723182835881.png)
 
 
 ------
