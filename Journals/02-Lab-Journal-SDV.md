@@ -127,7 +127,7 @@ I have decided that the data source I will be using is https://koordinates.com/ 
 
 Data I can get from this looks like this:
 
-![image-20210729150157543](https://imgur.com/a/RlJm9TS)
+![image-20210729150157543](https://i.imgur.com/av6BXbf.png)
 
 The reason I have chosen the data from this data source is because I believe I can implement it well in a way that matches the criteria of needing too implement features such as zoom and pan. I believe that I can use the data well (such as property ID or coordinates) to plot different points on a graph and identify other key information about that set of data in a quick view.
 
