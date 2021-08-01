@@ -121,7 +121,37 @@ What do I know now, that I did not know before?
 
 - That you use `and` instead of `&&`
 
-# Project Brief Continuation
+# PROJECT BRIEF
+
+I'll be working on an application that enables live and interactive graphical presentations, including charts, enabling a business (or scientific) analyst to provide multiple graphical perspectives of data sources. Data Explorer Screens are live interactive graphical displays that allow users to explore data from a data source (DES). The programme receives text input and mouse clicks at each DES and provides a brief summary of the scenario in relation to the data in an adjustable chart. Data explorer panels are available in the programme. Each screen has a chart and allows both text and pointer (i.e. mouse) input.
+
+The application will allow users to control and show at least three distinct DESs using console text input. Each DES includes graphics (each based on its own data source) as well as a summary or comparative analytical data. For analysts examining the current DES, the system will include a chat system that can be accessible via a remote http-based API using a remote data service. The final system will retrieve data from a remote data source that is shared. At each display, the screens will provide a number of alternatives for data viewing.
+
+## PURPOSE
+
+The purpose of the application is to allow more than one analyst to view the same DES at the same time and upload and retrieve data on a shared remote server. Two or more analysts can communicate with each other using a text chat system when they are viewing the same screen. This will be present in all of the DES.
+
+FEATURES
+
+The application will include the following (as stated previously):
+
+- Live and interactive graphical displays
+
+- Brief description of the situation relating to the displayed information/Brief summary
+
+- Console text-based input to control and display at least three different DES’s
+
+- Chat system
+
+- Retrieves data from a shared remote data source
+
+- Tools for adjusting the view (such as zoom, pan). Might include colour settings for easier viewing.
+
+- Multi-user access to views.
+
+- Ability to upload and retrieve the data.
+
+- Login and logout system.
 
 I have decided that the data source I will be using is https://koordinates.com/ .  At this stage, I am looking at using https://koordinates.com/from/data.linz.govt.nz/layer/50804/ which is NZ Property Titles.
 
