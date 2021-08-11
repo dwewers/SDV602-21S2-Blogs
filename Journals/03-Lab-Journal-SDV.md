@@ -2,7 +2,13 @@
 
 What have I learned?
 
-## Task one
+This week I learned about tuples, input(), and improved my knowledge on lists.
+
+As stated by Edpresso Team (2021), "A tuple is an immutable list of Python objects which means it can not be changed in any way once it has been created. Unlike sets, tuples are an ordered collection."
+
+input() is used when we want to read what the user has put into the console. This acts as a pause in the code while the system waits for the user input. We can set a variable to the value of the input for further use, whether it is comparison or to display.
+
+## Task one 
 
 Add a new menu method called "run_menu_two" that is executed when the top level menu item for Menu Two is selected. That method is to show a new menu using the same tuple format – with different menu items.
 
@@ -142,21 +148,34 @@ if __name__ == "__main__":
 
 How have I learned this?
 
+I have learned this by implementing methods that I have used in the past. I did some research into how we use tuples and input(), then implemented my knowledge. I already knew what lists were and how to use them, which meant that this was a bit easier than other tasks that were new to me
+
 
 ------
 
 Why have I learned this?
 
+I believe that I have learned these techniques as they are basic skills that we will use when it comes to writing code for later tasks and assessments. I also believe that we have learned this to show that these techniques relate to other languages such as JavaScript and HTML. On top of this, I believe that this is to show that there is not just one method when it comes to performing a task. Each of these examples show a different way to essentially perform the same task.
+
 
 ------
 
 What will I do to remember this learning?
-sdasd
+
+I will continue to practice and look at other code examples, implementing these learned skills into the tasks. I will also use these skill where necessary in our projects to come.
 
 ------
 
 What is the point?
 
+I believe that the point of this (as mentioned previously), is that they are basic skills that we will use when it comes to writing code for later tasks and assessments. I also believe that its to show that these techniques relate to other languages such as JavaScript and HTML.
+
 ------
 
 What do I know now, that I did not know before?
+
+I learned how to use the `random` library to get a random number in a specified range. Here is an example: `random.randint(10, 1000)`, which returns a value in the range of 10-1000
+
+**References**
+
+Edpresso Team. (2021, August 10). *What are tuples in Python?* Educative: Interactive Courses for Software Developers. https://www.educative.io/edpresso/what-are-tuples-in-python
