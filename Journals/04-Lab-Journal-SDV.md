@@ -42,6 +42,37 @@ Button Clicked:
 
 ![](https://i.imgur.com/iic9ThD.png)
 
+
+**Session 2**
+
+In this lesson we learned about local and global variables. A local variable is one that is contained within a function and cannot be accessed by other methods. We can however pass their values to other methods as arguments. A global variable is one that is defined in the global scope (outside of any methods). This can be accessed anywhere within the scope of its environment. Below is an example of a global variable and a local variable:
+
+```python
+x = 6 #!This is a global variable that can be accessed outside the scope of a method
+
+def foo():
+    x = x * 2
+    print(x)
+
+def bar():
+    x = x + 5
+    print(x)
+    
+foo()
+bar()
+```
+
+```python
+def foo():
+    y = 3 #! This is a local variable that can only be accessed within the scope of this method
+    print(y)
+
+foo()
+```
+
+
+
+
 ------
 
 How have I learned this?
