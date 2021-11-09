@@ -1196,19 +1196,19 @@ What do I know now, that I did not know before?
   These are basic skills we should know as these are common tasks that applications will perform. There are many scenarios where it will be useful to implement these techniques.
 
 
-  ------
+------
 
   Why have I learned this?
 
   I have learned this by watching YouTube videos and reading the python documentation to understand how to implement the code. i also looked at examples of where and how we can use file manipulation.
 
 
-  ------
+------
 
   What will I do to remember this learning?
   I will continue to practice these skills and find ways to implement file manipulation into my projects.
 
-  ------
+------
 
   What do I know now, that I did not know before?
 
@@ -1469,27 +1469,39 @@ Below is some examples of the different methods we can use:
 
 **CREATE** - Creates a table
 
-`https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"CREATE":"tblTest","EXAMPLE":{"PersonID PK":"Todd","Score":21}}}`
+```json
+https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"CREATE":"tblTest","EXAMPLE":{"PersonID PK":"Todd","Score":21}}}
+```
 
 **STORE** - Stores data in a table
 
-`https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"STORE":"tblTest","VALUE":[{"PersonID":"Todd","Score":21},{"PersonID":"Jane","Score":2000}]}}`
+```json
+https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"STORE":"tblTest","VALUE":[{"PersonID":"Todd","Score":21},{"PersonID":"Jane","Score":2000}]}}
+```
 
 **ALL** - Selects all data from the table
 
-`https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"ALL":"tblTest"}} `
+```json
+https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"ALL":"tblTest"}}
+```
 
 **SELECT** - Selects data based on a clause
 
-`https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"SELECT":"tblTest","WHERE":"Score > 200"}}`
+```json
+https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"SELECT":"tblTest","WHERE":"Score > 200"}}
+```
 
 **DELETE** - Deletes data from a table based on a clause
 
-`https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"DELETE":"tblTest","WHERE":"PersonID = 'Jane'"}}`
+```json
+https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"DELETE":"tblTest","WHERE":"PersonID = 'Jane'"}}
+```
 
 **DROP** - Drops the table from the database
 
-`https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"DROP":"tblTest"}}`
+```json
+https://newsimland.com/~todd/JSON/?tok={"tok":"Y O U R T O K E N GOES HERE","cmd":{"DROP":"tblTest"}}
+```
 
 ## Assessment ~ 
 
@@ -1614,7 +1626,7 @@ What do I know now, that I did not know before?
 
 ------
 
-#### <u>Threading</u>
+#### <u>Threading, Uploading Data, Retrieving Data</u>
 
 ------
 
@@ -1624,10 +1636,20 @@ The main change I made was creating an if statement containing a global variable
 
 ```python
 def chat_thread(self, session_id, window,):
+        """The thread that handles the chat messages
+
+        Args:
+            session_id ([string]): [the current sessions id]
+            window ([class]): [the window that the chat is being displayed on]
+        """
         while True:
+            # Calls the RetrieveMessages method from the Data class
             Data.RetrieveMessages(self, app=App, session=session_id, window=window)
+            
+            # A global variable which is used to define the thread status
             global thread_status
             
+            # Check if the thread should continue running
             if thread_status:
                 print('Chat thread has stopped')
                 break
@@ -1641,9 +1663,16 @@ The value of `thread_status` is set prior to the chat thread running. In the cas
 I set up a method that waits for the window event shown below. If this is detected, `thread_status` is set to True, causing it to be read as True the next time the thread method loops. We then use the `join()` method to terminate the thread.
 
 ```python
+            # Checks to see if the event is the exit button
             if event in (sg.WIN_CLOSED, '_EXIT_'):
+                
+                # Sets the thread_status variable to True
                 thread_status = True
+                
+                # Terminates the thread
                 t2.join()
+                
+                # Closes the window
                 window.close()
                 break
 ```
@@ -1651,4 +1680,101 @@ I set up a method that waits for the window event shown below. If this is detect
 This subtle difference greatly improved the reliability of the application. In saying this, I cant guarantee that it will run as smoothly on my laptop as it has far less specs than my home PC. 
 
 Another issue I was having was that there would be a delay from clicking the close button before the form would close. The reason this was happening is because the `time.sleep(2)` every time the loop was running. This meant that even if the thread was terminated, It would still run through the loop one last time. By adding `time.sleep(2)` at the end of the loop after the `if` statement, this removed the delay. If I were to have the sleep at the start of the loop, it would pause before checking the value of `thread_status.`
+
+## Uploading Data
+
+I also did some work improving my method for uploading data. During the testing of my code, I believed that it was running as expected. What I didn't realize was that it was only working because I was uploading small amounts of data at a time. Once I tried uploading CSV files that contained large amounts of rows, It would pass an error as the URL was too long. This took a bit of time to figure out, but in the end I made a for loop that splits the dataframe into chunks of ten using the numpy library and passing each chunk converted into a JSON string as separate URLs. This has fixed the issue, but is not the fastest method. I added a start and finish time and ran some tests on how long it took to upload by subtracting the start time from the end time. I found that it roughly takes one minute to upload 1000 records. This isn't the fasts, but I am limited to how long the URL can be.
+
+```python
+def UploadData(root, self, data):
+        """[Uploads the data to the remote storage]
+
+        Args:
+            root ([screen]): [the root screen that is displaying the data]
+            data ([dataframe]): [the data read from the selected file]
+        """
+        # Defines the packet size of each set of data that is being sent to the remote storage
+        packet_size = 10
+        
+        # Defines the starting time of when the upload started
+        start = time.time()
+        
+        # Sets the index to 0
+        i = 0;
+        
+        # Loops through the dataframe and sends the data to the remote storage in chunks of 10
+        for chunk in np.split(data, np.arange(packet_size, data.size, packet_size)):
+            if chunk.size:
+                # Converts the chunk to a json string
+                json_str = chunk.to_json(orient='records')
+                url = 'https://newsimland.com/~todd/JSON/?tok={"tok":"fc82391c-71b3-4134-91b2-6a40f6b28a94","cmd":{"STORE":"sdv_data_daniel","VALUE":'+ str(json_str) +'}}'
+                
+                # Stores the data in the remote storage
+                r = requests.get(url)
+                
+                # Increments the index by 1
+                i+=1
+                
+                # Prints the current index
+                print(i)
+                
+        data = r.json()
+        
+        # Defines the ending time of when the upload finished
+        end = time.time()
+        
+        # Prints to say that the upload has finished
+        print(f"Upload finished in {end - start} seconds")
+        
+        # Checks to see if the JsnMsg is an error message
+        if r.json()['JsnMsg'] is "ERROR.DATA_ERROR":
+            Alert(title="Error", text="Data upload unsuccessful")
+        else:
+            Alert(title="Success", text="Data upload successful")
+```
+
+## Downloading Data
+
+I also updated the method for downloading the data. This is very similar to the original, with the exception that I removed any duplicate data that was in the dataframe and stored each row of the data in an array. I then returned both the array and the dataframe as they serve different purposes for other tasks. Although the code is larger and more complex, it allows me to perform more for later methods.
+
+```python
+def RetireveData(self):
+        """[retireves the data from the remote storage]
+
+        Returns:
+            [dataframe]: [a dataframe of the data]
+            [array]: [an array of the data]
+        """
+        url = 'https://newsimland.com/~todd/JSON/?tok={"tok":"fc82391c-71b3-4134-91b2-6a40f6b28a94","cmd":{"ALL":"sdv_data_daniel"}}'
+        
+        # Request Data From Url
+        r = requests.get(url) 
+        
+        # Content of response
+        data = r.json()  
+        
+        # Convert to JSON
+        data = json.dumps(data['Msg'])
+        
+        # Checks to see if the JsnMsg is an error message
+        if r.json()['JsnMsg'] == "ERROR.DATA_ERROR":
+            Alert(title="Error", text="No data to download")
+            return None
+        else:
+            
+            # Convert json to dataframe
+            df = pd.read_json(data)
+            
+            # Remove duplicates but keep the first instance
+            df.drop_duplicates(keep='first', inplace=True)
+            
+            # Define an array that we will use instead of the dataframe
+            data_arr = []
+            
+            # Stores each row in the dataframe into an array as its own sub-array
+            for index, row in df.iterrows():
+                data_arr.append([row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], row[19], row[20],])
+
+            return data_arr, df
+```
 
